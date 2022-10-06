@@ -24,6 +24,8 @@ public class CalculateTypeNumber {
         //We need to know the compound numbers to evict iterate it
         Set<Integer> compoundNumbers = new HashSet<>();
 
+        Set<Integer> alreadyMult = new HashSet<>();
+
         for (int number : numbers) {
 
             //Count to know the number of cycles
@@ -45,10 +47,9 @@ public class CalculateTypeNumber {
 
             //We need to remove all compound numbers to save iterations
             numbersToMult.removeAll(compoundNumbers);
+            numbersToMult.removeAll(alreadyMult);
 
-            for (int multiplicand = 2;
-                 multiplicand <= numbersToMult.get(numbersToMult.size() - 1);
-                 multiplicand++) {
+            for (int multiplicand: numbersToMult) {
 
                 //Count to know the number of cycles
                 Number.TIMES = Number.TIMES + 1;
@@ -56,19 +57,28 @@ public class CalculateTypeNumber {
 
                 //We add the result of operation as a compound number
                 compoundNumbers.add(result);
+                alreadyMult.add(number);
 
                 //If the result of operation is major to the limit of list, we will break the loop
-                if (result > numbersToMult.get(numbersToMult.size() - 1)) {
-                    break;
+                int nextResult = 0;
+                if (numbersToMult.indexOf(multiplicand) < numbersToMult.size() - 1) {
+                    nextResult = number * numbersToMult.get(numbersToMult.indexOf(multiplicand) + 1);
                 }
+
+                System.out.println(multiplicand);
 
                 //We remove the compound number of the list of primes
                 primeNumbers.remove(new Number(result));
 
+                if (result > numbersToMult.get(numbersToMult.size() - 1) ||
+                        nextResult > numbersToMult.get(numbersToMult.size() - 1)) {
+                    break;
+                }
+
+
             }
 
-        }
-        ;
+        };
 
         //To know the total of iterations
         System.out.println(Number.TIMES);

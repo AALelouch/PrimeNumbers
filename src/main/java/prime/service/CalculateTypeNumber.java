@@ -26,13 +26,13 @@ public class CalculateTypeNumber {
 
         Set<Integer> alreadyMult = new HashSet<>();
 
-        for (int number : numbers) {
+        for (int number = 0; number<= numbers.size()-1; number++) {
 
             //Count to know the number of cycles
             Number.TIMES = Number.TIMES + 1;
 
             //If the number is a compound we will to continue the loop
-            if (compoundNumbers.contains(number)) {
+            if (compoundNumbers.contains(numbers.get(0))) {
                 continue;
             }
 
@@ -49,23 +49,25 @@ public class CalculateTypeNumber {
             numbersToMult.removeAll(compoundNumbers);
             numbersToMult.removeAll(alreadyMult);
 
+            if (numbers.get(number)*numbersToMult.get(0) > numbers.get(numbers.size() - 1)) {
+                break;
+            }
+
             for (int multiplicand: numbersToMult) {
 
                 //Count to know the number of cycles
                 Number.TIMES = Number.TIMES + 1;
-                int result = number * multiplicand;
+                int result = numbers.get(number) * multiplicand;
 
                 //We add the result of operation as a compound number
                 compoundNumbers.add(result);
-                alreadyMult.add(number);
+                alreadyMult.add(numbers.get(number));
 
                 //If the result of operation is major to the limit of list, we will break the loop
                 int nextResult = 0;
                 if (numbersToMult.indexOf(multiplicand) < numbersToMult.size() - 1) {
-                    nextResult = number * numbersToMult.get(numbersToMult.indexOf(multiplicand) + 1);
+                    nextResult = numbers.get(number) * numbersToMult.get(numbersToMult.indexOf(multiplicand) + 1);
                 }
-
-                System.out.println(multiplicand);
 
                 //We remove the compound number of the list of primes
                 primeNumbers.remove(new Number(result));
@@ -78,10 +80,19 @@ public class CalculateTypeNumber {
 
             }
 
+            if (number + 1 <= numbers.size() - 1){
+                if (compoundNumbers.contains(numbers.get(number + 1))){
+                    number = number + 1;
+                }
+                if (numbers.get(number + 1)*numbersToMult.get(0) > numbers.get(numbers.size() - 1)){
+                    break;
+                }
+            }
+
         };
 
         //To know the total of iterations
-        System.out.println(Number.TIMES);
+        //System.out.println(Number.TIMES);
         return primeNumbers;
 
     }
